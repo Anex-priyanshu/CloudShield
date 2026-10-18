@@ -25,7 +25,9 @@ class WebSocketClient {
     if (!token) return;
 
     this.isConnecting = true;
-    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8000/ws";
+    const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss:" : "ws:";
+    const defaultWs = typeof window !== "undefined" ? `${proto}//${window.location.hostname}:8000/ws` : "ws://localhost:8000/ws";
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || defaultWs;
 
     try {
       this.socket = new WebSocket(`${wsUrl}?token=${encodeURIComponent(token)}`);
