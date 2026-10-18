@@ -85,6 +85,11 @@ async def create_account(
     db.add(account)
     await db.commit()
     await db.refresh(account)
+
+    if account.credentials_encrypted:
+        from app.services.log_monitor import start_account_monitor
+        asyncio.create_task(start_account_monitor(account.id))
+
     return account
 
 
@@ -155,6 +160,9 @@ async def delete_account(
     account = result.scalar_one_or_none()
     if not account:
         raise HTTPException(status_code=404, detail="Account not found")
+    from app.services.log_monitor import stop_account_monitor
+    asyncio.create_task(stop_account_monitor(account.id))
+
     await db.delete(account)
     await db.commit()
 

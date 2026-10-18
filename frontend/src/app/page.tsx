@@ -65,17 +65,29 @@ export default function DashboardPage() {
     };
   }, [selectedAccount?.id]);
 
-  const severityCounts = summary?.severity_counts || {
-    critical: 0,
-    high: 0,
-    medium: 0,
-    low: 0,
+  const severityCounts = {
+    critical: summary?.severity_counts?.critical ?? summary?.critical ?? 0,
+    high: summary?.severity_counts?.high ?? summary?.high ?? 0,
+    medium: summary?.severity_counts?.medium ?? summary?.medium ?? 0,
+    low: summary?.severity_counts?.low ?? summary?.low ?? 0,
   };
 
-  const topRisks = summary?.top_risks || [];
-  const compliance = summary?.compliance_snapshot || {
-    overall_percent: 0,
-    categories: {},
+  const topRisks = summary?.top5_risks || summary?.top_risks || [];
+  const complianceCategories = summary?.compliance_pct || summary?.compliance_snapshot?.categories || {
+    IAM: 100,
+    Storage: 100,
+    Network: 100,
+    Logging: 100,
+    Encryption: 100,
+    Backup: 100,
+  };
+  const categoryVals: number[] = Object.values(complianceCategories);
+  const overallPercent = summary?.compliance_snapshot?.overall_percent ?? 
+    (categoryVals.length > 0 ? Math.round(categoryVals.reduce((a: number, b: number) => a + b, 0) / categoryVals.length) : 100);
+
+  const compliance = {
+    overall_percent: overallPercent,
+    categories: complianceCategories,
   };
 
   return (
@@ -86,11 +98,6 @@ export default function DashboardPage() {
           <div>
             <h1 className="text-2xl font-extrabold text-white tracking-tight flex items-center gap-2">
               Security Posture Dashboard
-              {selectedAccount?.is_demo && (
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/30">
-                  DEMO MODE
-                </span>
-              )}
             </h1>
             <p className="text-xs text-slate-400 mt-1">
               Real-time posture assessment, contextual risk prioritisation (Severity × Exposure × Sensitivity), and live CloudTrail threat detection.
@@ -108,6 +115,27 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
+
+        {/* Connect Account Prompt if no active account */}
+        {!selectedAccount && !loading && (
+          <div className="bg-gradient-to-r from-blue-900/40 via-[#111B2E] to-cyan-900/30 border border-blue-500/30 rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-4 shadow-xl">
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-white flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-cyan-400" />
+                Connect Your AWS Cloud Environment
+              </h3>
+              <p className="text-xs text-slate-300">
+                CloudShield assesses your live cloud posture against 25 CIS AWS Foundations Benchmark controls and streams CloudTrail threat detections in real time using secure, read-only IAM credentials or Assume Role.
+              </p>
+            </div>
+            <Link
+              href="/accounts"
+              className="shrink-0 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-bold text-xs rounded-xl shadow-lg shadow-blue-500/25 transition"
+            >
+              + Connect AWS Account
+            </Link>
+          </div>
+        )}
 
         {/* Top Row: 4 Severity Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -455,14 +483,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-6 gap-3">
-            {Object.entries(compliance.categories || {
-              IAM: 65,
-              Storage: 72,
-              Network: 50,
-              Logging: 60,
-              Encryption: 75,
-              Backup: 80,
-            }).map(([cat, pct]: [string, any]) => (
+            {Object.entries(compliance.categories).map(([cat, pct]: [string, any]) => (
               <div key={cat} className="bg-[#090f1b] p-3 rounded-xl border border-[#1e2d48] space-y-1.5">
                 <div className="flex justify-between text-xs">
                   <span className="text-slate-300 font-medium">{cat}</span>

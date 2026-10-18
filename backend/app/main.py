@@ -12,7 +12,7 @@ from app.db import init_db, AsyncSessionLocal
 from app.models import User, UserRole, Setting
 from app.auth import hash_password, get_ws_user
 from app.services.ws_hub import ws_hub
-from app.services.log_monitor import start_all_demo_monitors
+from app.services.log_monitor import start_all_monitors
 from app.routers import auth, accounts, scans, findings, dashboard, monitor, iac, reports, settings
 
 logging.basicConfig(level=logging.INFO)
@@ -62,7 +62,7 @@ async def lifespan(app: FastAPI):
     await init_db()
     await seed_admin()
     await seed_default_settings()
-    await start_all_demo_monitors()
+    await start_all_monitors()
     logger.info("CloudShield ready!")
     yield
     # Shutdown

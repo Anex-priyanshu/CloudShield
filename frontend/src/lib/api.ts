@@ -111,8 +111,6 @@ export const api = {
   getAccounts: () => request("/accounts"),
   createAccount: (accountData: any) =>
     request("/accounts", { method: "POST", body: JSON.stringify(accountData) }),
-  createDemoAccount: () =>
-    request("/accounts/demo", { method: "POST" }),
   testAccount: (id: number) =>
     request(`/accounts/${id}/test`, { method: "POST" }),
   deleteAccount: (id: number) =>

@@ -112,7 +112,7 @@ export default function FindingsPage() {
 
   const categories = ["IAM", "Storage", "Network", "Logging", "Encryption", "Backup"];
 
-  // Sort comparison list for the demo proof
+  // Sort comparison list for contextual risk proof
   const rawSeveritySorted = [...findings].sort((a, b) => b.severity - a.severity);
   const riskScoreSorted = [...findings].sort((a, b) => b.risk_score - a.risk_score);
 
@@ -428,7 +428,7 @@ export default function FindingsPage() {
             </div>
 
             <div className="p-3 bg-blue-950/30 border border-blue-800/40 rounded-xl text-xs text-slate-300">
-              💡 <strong>College Presentation Takeaway:</strong> CloudShield's context-aware formula ensures engineers don't waste 4 hours auditing an empty test bucket while confidential customer data is exposed to 0.0.0.0/0.
+              💡 <strong>Operational Impact:</strong> CloudShield's context-aware formula ensures security engineers focus immediately on critical attack paths without getting overwhelmed by alert fatigue on low-impact internal resources.
             </div>
           </div>
         </div>

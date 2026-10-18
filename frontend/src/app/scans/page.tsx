@@ -320,38 +320,46 @@ function ScansContent() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#1e2d48]">
-                {scans.map((s) => (
-                  <tr key={s.id} className="hover:bg-[#162238] transition">
-                    <td className="py-2.5 px-3 font-mono font-bold text-slate-200">
-                      #{s.id}
-                    </td>
-                    <td className="py-2.5 px-3 text-slate-400">
-                      {s.started_at ? new Date(s.started_at).toLocaleString() : "Unknown"}
-                    </td>
-                    <td className="py-2.5 px-3">
-                      <span className="font-semibold text-slate-200 uppercase text-[11px]">
-                        {s.status}
-                      </span>
-                    </td>
-                    <td className="py-2.5 px-3 text-slate-300 font-mono">
-                      {s.total_resources}
-                    </td>
-                    <td className="py-2.5 px-3 font-mono font-bold text-red-400">
-                      {s.total_findings}
-                    </td>
-                    <td className="py-2.5 px-3 font-mono font-extrabold text-white">
-                      {s.account_risk_score} / 100
-                    </td>
-                    <td className="py-2.5 px-3 text-right">
-                      <button
-                        onClick={() => loadScanDetail(s.id)}
-                        className="px-2.5 py-1 bg-[#090f1b] hover:bg-blue-600 hover:text-white text-blue-400 rounded-lg text-xs font-semibold border border-[#24324D] transition"
-                      >
-                        View Scan
-                      </button>
+                {scans.length > 0 ? (
+                  scans.map((s) => (
+                    <tr key={s.id} className="hover:bg-[#162238] transition">
+                      <td className="py-2.5 px-3 font-mono font-bold text-slate-200">
+                        #{s.id}
+                      </td>
+                      <td className="py-2.5 px-3 text-slate-400">
+                        {s.started_at ? new Date(s.started_at).toLocaleString() : "Unknown"}
+                      </td>
+                      <td className="py-2.5 px-3">
+                        <span className="font-semibold text-slate-200 uppercase text-[11px]">
+                          {s.status}
+                        </span>
+                      </td>
+                      <td className="py-2.5 px-3 text-slate-300 font-mono">
+                        {s.total_resources}
+                      </td>
+                      <td className="py-2.5 px-3 font-mono font-bold text-red-400">
+                        {s.total_findings}
+                      </td>
+                      <td className="py-2.5 px-3 font-mono font-extrabold text-white">
+                        {s.account_risk_score} / 100
+                      </td>
+                      <td className="py-2.5 px-3 text-right">
+                        <button
+                          onClick={() => loadScanDetail(s.id)}
+                          className="px-2.5 py-1 bg-[#090f1b] hover:bg-blue-600 hover:text-white text-blue-400 rounded-lg text-xs font-semibold border border-[#24324D] transition"
+                        >
+                          View Scan
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={7} className="py-8 text-center text-slate-400 text-xs">
+                      No posture scans recorded yet. Connect an AWS account and run a scan to inspect CIS controls.
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>

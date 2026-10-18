@@ -19,7 +19,6 @@ interface Account {
   name: string;
   provider: string;
   region: string;
-  is_demo: boolean;
   status: string;
 }
 
@@ -80,15 +79,6 @@ export function TopBar({ onAccountChange, selectedAccountId }: TopBarProps) {
     }
   };
 
-  const handleCreateDemo = async () => {
-    try {
-      await api.createDemoAccount();
-      await loadAccounts();
-    } catch (err: any) {
-      setErrorMsg(err.message || "Could not create demo account");
-    }
-  };
-
   return (
     <header className="h-16 bg-[#0B1220] border-b border-[#24324D] px-6 flex items-center justify-between sticky top-0 z-30">
       {/* Left: Account Selector */}
@@ -104,7 +94,6 @@ export function TopBar({ onAccountChange, selectedAccountId }: TopBarProps) {
               {accounts.map((acc) => (
                 <option key={acc.id} value={acc.id} className="bg-[#111B2E] text-slate-200">
                   {acc.name} ({acc.provider.toUpperCase()} - {acc.region})
-                  {acc.is_demo ? " [DEMO]" : ""}
                 </option>
               ))}
             </select>
@@ -113,20 +102,13 @@ export function TopBar({ onAccountChange, selectedAccountId }: TopBarProps) {
           )}
         </div>
 
-        {currentAccount?.is_demo && (
-          <span className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-bold bg-amber-500/15 text-amber-400 border border-amber-500/30 rounded-full animate-pulse">
-            <Sparkles className="w-3.5 h-3.5" />
-            SIMULATED DEMO SANDBOX
-          </span>
-        )}
-
         {accounts.length === 0 && (
           <button
-            onClick={handleCreateDemo}
+            onClick={() => router.push("/accounts")}
             className="text-xs font-semibold px-2.5 py-1.5 bg-cyan-600/20 text-cyan-400 hover:bg-cyan-600/30 border border-cyan-500/30 rounded-lg flex items-center gap-1.5 transition"
           >
             <Plus className="w-3.5 h-3.5" />
-            Add Demo Account
+            Connect AWS Account
           </button>
         )}
 

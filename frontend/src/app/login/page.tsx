@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Shield, Lock, Mail, ArrowRight, AlertCircle, KeyRound } from "lucide-react";
+import { Shield, Lock, Mail, ArrowRight, AlertCircle } from "lucide-react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 
@@ -32,12 +32,6 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const fillDemoCreds = () => {
-    setEmail("admin@cloudshield.local");
-    setPassword("Admin@12345!");
-    setError("");
   };
 
   return (
@@ -105,27 +99,12 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl text-sm shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition disabled:opacity-50"
+            className="w-full mt-4 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-xl text-sm shadow-lg shadow-blue-600/30 flex items-center justify-center gap-2 transition disabled:opacity-50"
           >
             <span>{loading ? "Authenticating..." : "Sign In to CloudShield"}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
-
-        {/* Quick Demo Credentials shortcut */}
-        <div className="mt-6 pt-5 border-t border-[#24324D] flex flex-col items-center">
-          <button
-            type="button"
-            onClick={fillDemoCreds}
-            className="flex items-center gap-1.5 text-xs text-cyan-400 hover:text-cyan-300 font-medium bg-[#162238] border border-[#24324D] px-3 py-1.5 rounded-lg transition"
-          >
-            <KeyRound className="w-3.5 h-3.5" />
-            Fill Default Admin Credentials (Demo)
-          </button>
-          <span className="text-[11px] text-slate-500 mt-2">
-            admin@cloudshield.local • Admin@12345!
-          </span>
-        </div>
       </div>
     </div>
   );

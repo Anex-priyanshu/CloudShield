@@ -290,30 +290,43 @@ export default function SettingsPage() {
             </div>
 
             {/* Formula Explanation documentation card */}
-            <div className="bg-[#111B2E] border border-[#24324D] rounded-2xl p-5 space-y-3">
+            <div className="bg-[#111B2E] border border-[#24324D] rounded-2xl p-5 space-y-4 overflow-hidden">
               <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <Info className="w-4 h-4 text-cyan-400" />
-                How the Score is Calculated
+                <Info className="w-4 h-4 text-cyan-400 shrink-0" />
+                <span>How the Score is Calculated</span>
               </h3>
-              <div className="text-xs text-slate-300 space-y-2 leading-relaxed">
-                <p>
-                  <strong>Finding Risk Score (1 to 125):</strong>
-                </p>
-                <pre className="p-2.5 bg-[#090f1b] border border-[#1e2d48] rounded-lg text-cyan-300 font-mono text-[11px]">
-                  Risk Score = Severity × Exposure × Sensitivity
-                </pre>
-                <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[11px]">
-                  <li><strong>Severity (1-5):</strong> Inherent technical severity of the misconfiguration.</li>
-                  <li><strong>Exposure (1-5):</strong> 5 = 0.0.0.0/0 public internet; 1 = internal VPC only.</li>
-                  <li><strong>Data Sensitivity (1-5):</strong> Read from tags or regex heuristics (e.g. prod, pii, customer = 4).</li>
-                </ul>
+              <div className="text-xs text-slate-300 space-y-3 leading-relaxed">
+                <div className="space-y-1.5">
+                  <span className="font-semibold text-white block text-xs">
+                    Finding Risk Score (1 to 125):
+                  </span>
+                  <div className="p-2.5 bg-[#090f1b] border border-cyan-500/25 rounded-xl text-cyan-300 font-mono text-[11px] font-bold text-center break-words shadow-inner">
+                    Risk Score = Severity × Exposure × Sensitivity
+                  </div>
+                  <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[11px]">
+                    <li><strong className="text-slate-300">Severity (1–5):</strong> Inherent technical severity.</li>
+                    <li><strong className="text-slate-300">Exposure (1–5):</strong> 5 = public internet; 1 = internal VPC.</li>
+                    <li><strong className="text-slate-300">Data Sensitivity (1–5):</strong> Derived from tags/heuristics (prod, PII = 4).</li>
+                  </ul>
+                </div>
 
-                <p className="pt-2">
-                  <strong>Account Risk Score (0 to 100):</strong>
-                </p>
-                <pre className="p-2.5 bg-[#090f1b] border border-[#1e2d48] rounded-lg text-cyan-300 font-mono text-[11px]">
-                  Account Score = min(100, round((Sum of Open Findings / (Resources × 25)) × 100))
-                </pre>
+                <div className="pt-3 border-t border-[#24324D] space-y-1.5">
+                  <span className="font-semibold text-white block text-xs">
+                    Account Risk Score (0 to 100):
+                  </span>
+                  <div className="p-3 bg-[#090f1b] border border-cyan-500/25 rounded-xl text-cyan-300 font-mono text-[11px] leading-relaxed break-words whitespace-normal shadow-inner space-y-1">
+                    <div className="font-bold text-white">Account Score = min(100,</div>
+                    <div className="pl-3 text-cyan-300">
+                      round((<span className="text-blue-300">Sum of Open Findings</span> /
+                    </div>
+                    <div className="pl-9 text-cyan-300">
+                      (<span className="text-amber-300">Resources × 25</span>)) × 100))
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-slate-400 pt-0.5">
+                    Normalizes overall account risk based on total cloud resource footprint (baseline 25 avg score per resource).
+                  </p>
+                </div>
               </div>
             </div>
           </div>

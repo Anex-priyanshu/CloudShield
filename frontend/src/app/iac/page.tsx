@@ -85,7 +85,7 @@ export default function IacScannerPage() {
               className="flex items-center gap-1.5 px-3.5 py-2 bg-red-950/40 hover:bg-red-900/60 text-red-300 border border-red-800/80 rounded-xl text-xs font-bold transition"
             >
               <Sparkles className="w-3.5 h-3.5 text-red-400" />
-              <span>Load Insecure Sample (FAIL Gate)</span>
+              <span>Load Non-Compliant Template</span>
             </button>
 
             <button
@@ -94,7 +94,7 @@ export default function IacScannerPage() {
               className="flex items-center gap-1.5 px-3.5 py-2 bg-emerald-950/40 hover:bg-emerald-900/60 text-emerald-300 border border-emerald-800/80 rounded-xl text-xs font-bold transition"
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Load Secure Sample (PASS Gate)</span>
+              <span>Load Hardened Template</span>
             </button>
           </div>
         </div>

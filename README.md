@@ -106,15 +106,15 @@ cloudshield/
 
 ---
 
-## Demo Mode
+## Connecting AWS Accounts & Scanning
 
-No AWS account? No problem!
-
-1. Login → Click **"Add Demo Account"**
-2. Click **"Start Scan"**
-3. Watch live findings stream in (25+ findings, 3+ Critical)
-
-The demo uses a built-in seeded dataset of a deliberately insecure AWS account (public S3 buckets, IAM users without MFA, open security groups, etc.). All findings go through the same check engine and risk engine as real data.
+1. Sign in to CloudShield with `admin@cloudshield.local` / `Admin@12345!`
+2. Navigate to **Connected Cloud Accounts** (`/accounts`)
+3. Click **"+ Connect AWS Account"**
+4. Provide your AWS IAM Access Key / Secret Key or Assume Role ARN (configured with the Read-Only policy below).
+5. Click **"Verify Connection"** to test via AWS STS `GetCallerIdentity`.
+6. Click **"Start Scan"** to run 25 read-only CIS Benchmark posture checks across IAM, S3, EC2, RDS, CloudTrail, KMS, and EBS.
+7. CloudTrail audit events will stream continuously into the **Live Monitor Console** with real-time threat rule detections.
 
 ---
 
