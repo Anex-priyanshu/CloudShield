@@ -1,0 +1,41 @@
+.env
+*.pyc
+__pycache__/
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+*.db
+*.sqlite
+*.sqlite3
+cloudshield.db
+
+# Node
+node_modules/
+.next/
+out/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# IaC temp uploads
+backend/app/tmp/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Secrets – NEVER commit
+.env
+*.pem
+*.key

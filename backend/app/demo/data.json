@@ -1,0 +1,302 @@
+{
+  "account_id": "123456789012",
+  "account_name": "Demo-Sandbox",
+  "region": "us-east-1",
+  "s3_buckets": [
+    {
+      "Name": "customer-data-prod",
+      "Region": "us-east-1",
+      "ACL": "public-read",
+      "PublicAccessBlock": {"BlockPublicAcls": false, "BlockPublicPolicy": false, "IgnorePublicAcls": false, "RestrictPublicBuckets": false},
+      "Encryption": null,
+      "Versioning": false,
+      "LoggingEnabled": false,
+      "HttpsEnforced": false,
+      "Tags": {"data-classification": "confidential", "env": "prod"}
+    },
+    {
+      "Name": "company-backup-store",
+      "Region": "us-east-1",
+      "ACL": "public-read-write",
+      "PublicAccessBlock": {"BlockPublicAcls": false, "BlockPublicPolicy": false, "IgnorePublicAcls": false, "RestrictPublicBuckets": false},
+      "Encryption": null,
+      "Versioning": false,
+      "LoggingEnabled": false,
+      "HttpsEnforced": false,
+      "Tags": {}
+    },
+    {
+      "Name": "internal-hr-records",
+      "Region": "us-east-1",
+      "ACL": "private",
+      "PublicAccessBlock": {"BlockPublicAcls": true, "BlockPublicPolicy": true, "IgnorePublicAcls": true, "RestrictPublicBuckets": true},
+      "Encryption": null,
+      "Versioning": true,
+      "LoggingEnabled": false,
+      "HttpsEnforced": false,
+      "Tags": {"data-classification": "restricted"}
+    },
+    {
+      "Name": "dev-test-artifacts",
+      "Region": "us-east-1",
+      "ACL": "private",
+      "PublicAccessBlock": {"BlockPublicAcls": true, "BlockPublicPolicy": true, "IgnorePublicAcls": true, "RestrictPublicBuckets": true},
+      "Encryption": {"SSEAlgorithm": "AES256"},
+      "Versioning": false,
+      "LoggingEnabled": false,
+      "HttpsEnforced": false,
+      "Tags": {"env": "dev"}
+    },
+    {
+      "Name": "finance-reports-2024",
+      "Region": "us-east-1",
+      "ACL": "private",
+      "PublicAccessBlock": {"BlockPublicAcls": true, "BlockPublicPolicy": false, "IgnorePublicAcls": false, "RestrictPublicBuckets": false},
+      "Encryption": null,
+      "Versioning": false,
+      "LoggingEnabled": false,
+      "HttpsEnforced": false,
+      "Tags": {"data-classification": "confidential"}
+    },
+    {
+      "Name": "app-access-logs",
+      "Region": "us-east-1",
+      "ACL": "private",
+      "PublicAccessBlock": {"BlockPublicAcls": true, "BlockPublicPolicy": true, "IgnorePublicAcls": true, "RestrictPublicBuckets": true},
+      "Encryption": {"SSEAlgorithm": "AES256"},
+      "Versioning": true,
+      "LoggingEnabled": true,
+      "HttpsEnforced": true,
+      "Tags": {}
+    }
+  ],
+  "account_level_public_access_block": false,
+  "iam": {
+    "root_mfa_active": false,
+    "root_access_keys_active": true,
+    "account_password_policy": {
+      "MinimumPasswordLength": 8,
+      "RequireUppercaseCharacters": false,
+      "RequireLowercaseCharacters": true,
+      "RequireNumbers": false,
+      "RequireSymbols": false,
+      "AllowUsersToChangePassword": true,
+      "ExpirePasswords": false,
+      "MaxPasswordAge": 0,
+      "PasswordReusePrevention": 0
+    },
+    "users": [
+      {
+        "UserName": "alice-admin",
+        "UserId": "AIDA0001",
+        "Arn": "arn:aws:iam::123456789012:user/alice-admin",
+        "PasswordLastUsed": "2026-10-01T10:00:00Z",
+        "CreateDate": "2024-01-01T00:00:00Z",
+        "MFAActive": false,
+        "HasConsoleAccess": true,
+        "AccessKeys": [
+          {"AccessKeyId": "AKIA0001", "Status": "Active", "CreateDate": "2026-01-01T00:00:00Z", "LastUsedDate": "2026-10-01T00:00:00Z"}
+        ],
+        "AttachedPolicies": ["AdministratorAccess"],
+        "InlinePolicies": [{"PolicyName": "admin-inline", "PolicyDocument": {"Version": "2012-10-17", "Statement": [{"Effect": "Allow", "Action": "*", "Resource": "*"}]}}]
+      },
+      {
+        "UserName": "bob-developer",
+        "UserId": "AIDA0002",
+        "Arn": "arn:aws:iam::123456789012:user/bob-developer",
+        "PasswordLastUsed": "2026-09-15T10:00:00Z",
+        "CreateDate": "2024-03-01T00:00:00Z",
+        "MFAActive": false,
+        "HasConsoleAccess": true,
+        "AccessKeys": [
+          {"AccessKeyId": "AKIA0002", "Status": "Active", "CreateDate": "2025-07-01T00:00:00Z", "LastUsedDate": "2026-09-15T00:00:00Z"}
+        ],
+        "AttachedPolicies": ["PowerUserAccess"],
+        "InlinePolicies": []
+      },
+      {
+        "UserName": "carol-viewer",
+        "UserId": "AIDA0003",
+        "Arn": "arn:aws:iam::123456789012:user/carol-viewer",
+        "PasswordLastUsed": "2026-07-01T10:00:00Z",
+        "CreateDate": "2023-06-01T00:00:00Z",
+        "MFAActive": false,
+        "HasConsoleAccess": true,
+        "AccessKeys": [],
+        "AttachedPolicies": ["ReadOnlyAccess"],
+        "InlinePolicies": []
+      },
+      {
+        "UserName": "david-devops",
+        "UserId": "AIDA0004",
+        "Arn": "arn:aws:iam::123456789012:user/david-devops",
+        "PasswordLastUsed": "2026-10-10T10:00:00Z",
+        "CreateDate": "2024-05-01T00:00:00Z",
+        "MFAActive": true,
+        "HasConsoleAccess": true,
+        "AccessKeys": [
+          {"AccessKeyId": "AKIA0004", "Status": "Active", "CreateDate": "2026-04-01T00:00:00Z", "LastUsedDate": "2026-10-10T00:00:00Z"}
+        ],
+        "AttachedPolicies": [],
+        "InlinePolicies": []
+      },
+      {
+        "UserName": "eve-old-account",
+        "UserId": "AIDA0005",
+        "Arn": "arn:aws:iam::123456789012:user/eve-old-account",
+        "PasswordLastUsed": "2025-12-01T10:00:00Z",
+        "CreateDate": "2022-01-01T00:00:00Z",
+        "MFAActive": false,
+        "HasConsoleAccess": true,
+        "AccessKeys": [
+          {"AccessKeyId": "AKIA0005", "Status": "Active", "CreateDate": "2024-06-01T00:00:00Z", "LastUsedDate": "2025-12-01T00:00:00Z"}
+        ],
+        "AttachedPolicies": [],
+        "InlinePolicies": []
+      },
+      {
+        "UserName": "svc-cicd",
+        "UserId": "AIDA0006",
+        "Arn": "arn:aws:iam::123456789012:user/svc-cicd",
+        "PasswordLastUsed": null,
+        "CreateDate": "2024-02-01T00:00:00Z",
+        "MFAActive": false,
+        "HasConsoleAccess": false,
+        "AccessKeys": [
+          {"AccessKeyId": "AKIA0006", "Status": "Active", "CreateDate": "2025-02-01T00:00:00Z", "LastUsedDate": "2026-10-15T00:00:00Z"}
+        ],
+        "AttachedPolicies": [],
+        "InlinePolicies": []
+      },
+      {
+        "UserName": "frank-intern",
+        "UserId": "AIDA0007",
+        "Arn": "arn:aws:iam::123456789012:user/frank-intern",
+        "PasswordLastUsed": null,
+        "CreateDate": "2025-09-01T00:00:00Z",
+        "MFAActive": false,
+        "HasConsoleAccess": false,
+        "AccessKeys": [],
+        "AttachedPolicies": ["ReadOnlyAccess"],
+        "InlinePolicies": []
+      },
+      {
+        "UserName": "grace-analyst",
+        "UserId": "AIDA0008",
+        "Arn": "arn:aws:iam::123456789012:user/grace-analyst",
+        "PasswordLastUsed": "2026-10-16T10:00:00Z",
+        "CreateDate": "2024-08-01T00:00:00Z",
+        "MFAActive": true,
+        "HasConsoleAccess": true,
+        "AccessKeys": [],
+        "AttachedPolicies": ["SecurityAudit"],
+        "InlinePolicies": []
+      }
+    ]
+  },
+  "security_groups": [
+    {
+      "GroupId": "sg-00001",
+      "GroupName": "web-servers-sg",
+      "VpcId": "vpc-001",
+      "IpPermissions": [
+        {"FromPort": 22, "ToPort": 22, "IpProtocol": "tcp", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []},
+        {"FromPort": 80, "ToPort": 80, "IpProtocol": "tcp", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []},
+        {"FromPort": 443, "ToPort": 443, "IpProtocol": "tcp", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []}
+      ]
+    },
+    {
+      "GroupId": "sg-00002",
+      "GroupName": "rdp-management",
+      "VpcId": "vpc-001",
+      "IpPermissions": [
+        {"FromPort": 3389, "ToPort": 3389, "IpProtocol": "tcp", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []},
+        {"FromPort": 22, "ToPort": 22, "IpProtocol": "tcp", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []}
+      ]
+    },
+    {
+      "GroupId": "sg-00003",
+      "GroupName": "database-sg",
+      "VpcId": "vpc-001",
+      "IpPermissions": [
+        {"FromPort": 3306, "ToPort": 3306, "IpProtocol": "tcp", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []},
+        {"FromPort": 5432, "ToPort": 5432, "IpProtocol": "tcp", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []}
+      ]
+    },
+    {
+      "GroupId": "sg-00004",
+      "GroupName": "all-open-sg",
+      "VpcId": "vpc-001",
+      "IpPermissions": [
+        {"FromPort": -1, "ToPort": -1, "IpProtocol": "-1", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []}
+      ]
+    },
+    {
+      "GroupId": "sg-default",
+      "GroupName": "default",
+      "VpcId": "vpc-001",
+      "IpPermissions": [
+        {"FromPort": -1, "ToPort": -1, "IpProtocol": "-1", "IpRanges": [{"CidrIp": "0.0.0.0/0"}], "Ipv6Ranges": []}
+      ]
+    }
+  ],
+  "cloudtrail_trails": [
+    {
+      "TrailARN": "arn:aws:cloudtrail:us-east-1:123456789012:trail/main-trail",
+      "IsMultiRegionTrail": false,
+      "LogFileValidationEnabled": false,
+      "IsLogging": true,
+      "HomeRegion": "us-east-1"
+    }
+  ],
+  "ebs_volumes": [
+    {"VolumeId": "vol-001", "Encrypted": false, "Size": 100, "Tags": [{"Key": "Name", "Value": "prod-db-volume"}]},
+    {"VolumeId": "vol-002", "Encrypted": false, "Size": 50, "Tags": [{"Key": "Name", "Value": "web-server-data"}]},
+    {"VolumeId": "vol-003", "Encrypted": false, "Size": 200, "Tags": [{"Key": "Name", "Value": "customer-data-volume"}]},
+    {"VolumeId": "vol-004", "Encrypted": false, "Size": 20, "Tags": [{"Key": "Name", "Value": "tmp-scratch-volume"}]},
+    {"VolumeId": "vol-005", "Encrypted": true, "Size": 500, "Tags": [{"Key": "Name", "Value": "encrypted-backup"}]}
+  ],
+  "ebs_snapshots": [
+    {"VolumeId": "vol-005", "SnapshotId": "snap-001"}
+  ],
+  "rds_instances": [
+    {
+      "DBInstanceIdentifier": "prod-customer-db",
+      "DBInstanceClass": "db.t3.medium",
+      "Engine": "mysql",
+      "StorageEncrypted": false,
+      "PubliclyAccessible": true,
+      "BackupRetentionPeriod": 3,
+      "MultiAZ": false,
+      "Tags": [{"Key": "data-classification", "Value": "confidential"}]
+    },
+    {
+      "DBInstanceIdentifier": "dev-test-db",
+      "DBInstanceClass": "db.t3.micro",
+      "Engine": "postgres",
+      "StorageEncrypted": true,
+      "PubliclyAccessible": false,
+      "BackupRetentionPeriod": 7,
+      "MultiAZ": false,
+      "Tags": [{"Key": "env", "Value": "dev"}]
+    }
+  ],
+  "kms_keys": [
+    {
+      "KeyId": "key-001",
+      "KeyArn": "arn:aws:kms:us-east-1:123456789012:key/key-001",
+      "Description": "Customer master key for S3",
+      "KeyManager": "CUSTOMER",
+      "KeyState": "Enabled",
+      "RotationEnabled": false
+    },
+    {
+      "KeyId": "key-002",
+      "KeyArn": "arn:aws:kms:us-east-1:123456789012:key/key-002",
+      "Description": "Key for RDS encryption",
+      "KeyManager": "CUSTOMER",
+      "KeyState": "Enabled",
+      "RotationEnabled": true
+    }
+  ]
+}
