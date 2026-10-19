@@ -4,14 +4,22 @@
 
 export function getApiBase(): string {
   if (typeof window !== "undefined") {
-    return `${window.location.protocol}//${window.location.hostname}:8000/api/v1`;
+    return `${window.location.protocol}//${window.location.hostname}:8050/api/v1`;
   }
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:8050/api/v1";
 }
 
 export function getToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem("cloudshield_token");
+  const token = localStorage.getItem("cloudshield_token");
+  if (token === "netshield-demo-jwt-token" || !token) {
+    if (token === "netshield-demo-jwt-token") {
+      localStorage.removeItem("cloudshield_token");
+      localStorage.removeItem("cloudshield_user");
+    }
+    return null;
+  }
+  return token;
 }
 
 export function setToken(token: string) {

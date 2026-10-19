@@ -29,7 +29,7 @@ interface TopBarProps {
 
 export function TopBar({ onAccountChange, selectedAccountId }: TopBarProps) {
   const router = useRouter();
-  const { isAdmin } = useAuth();
+  const { isAdmin, user, loading: authLoading } = useAuth();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [currentAccount, setCurrentAccount] = useState<Account | null>(null);
   const [scanning, setScanning] = useState(false);
@@ -38,10 +38,11 @@ export function TopBar({ onAccountChange, selectedAccountId }: TopBarProps) {
   const loadAccounts = async () => {
     try {
       const data = await api.getAccounts();
-      setAccounts(data);
-      if (data.length > 0) {
-        const found = selectedAccountId ? data.find((a: Account) => a.id === selectedAccountId) : data[0];
-        const active = found || data[0];
+      const safeData = Array.isArray(data) ? data : [];
+      setAccounts(safeData);
+      if (safeData.length > 0) {
+        const found = selectedAccountId ? safeData.find((a: Account) => a.id === selectedAccountId) : safeData[0];
+        const active = found || safeData[0];
         setCurrentAccount(active);
         onAccountChange?.(active);
       } else {
@@ -50,12 +51,15 @@ export function TopBar({ onAccountChange, selectedAccountId }: TopBarProps) {
       }
     } catch (e: any) {
       console.warn("Could not load accounts", e);
+      setAccounts([]);
     }
   };
 
   useEffect(() => {
-    loadAccounts();
-  }, [selectedAccountId]);
+    if (!authLoading && user) {
+      loadAccounts();
+    }
+  }, [selectedAccountId, user, authLoading]);
 
   const handleSelectAccount = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const id = parseInt(e.target.value);
@@ -85,13 +89,13 @@ export function TopBar({ onAccountChange, selectedAccountId }: TopBarProps) {
       <div className="flex items-center gap-3">
         <div className="flex items-center gap-2 bg-[#111B2E] border border-[#24324D] rounded-lg px-3 py-1.5 shadow-sm">
           <Cloud className="w-4 h-4 text-cyan-400" />
-          {accounts.length > 0 ? (
+          {(Array.isArray(accounts) ? accounts : []).length > 0 ? (
             <select
               value={currentAccount?.id || ""}
               onChange={handleSelectAccount}
               className="bg-transparent text-sm font-medium text-slate-200 focus:outline-none cursor-pointer pr-2"
             >
-              {accounts.map((acc) => (
+              {(Array.isArray(accounts) ? accounts : []).map((acc) => (
                 <option key={acc.id} value={acc.id} className="bg-[#111B2E] text-slate-200">
                   {acc.name} ({acc.provider.toUpperCase()} - {acc.region})
                 </option>
@@ -102,7 +106,7 @@ export function TopBar({ onAccountChange, selectedAccountId }: TopBarProps) {
           )}
         </div>
 
-        {accounts.length === 0 && (
+        {(Array.isArray(accounts) ? accounts.length : 0) === 0 && (
           <button
             onClick={() => router.push("/accounts")}
             className="text-xs font-semibold px-2.5 py-1.5 bg-cyan-600/20 text-cyan-400 hover:bg-cyan-600/30 border border-cyan-500/30 rounded-lg flex items-center gap-1.5 transition"

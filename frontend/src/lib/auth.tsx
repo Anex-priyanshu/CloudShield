@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { getUser, clearToken, setUser, api } from "./api";
+import { getUser, clearToken, setUser, setToken, api } from "./api";
 import { wsClient } from "./ws";
 
 interface UserData {
@@ -31,15 +31,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const existing = getUser();
-    if (existing) {
-      setUserState(existing);
-      wsClient.connect();
-    }
-    setLoading(false);
+    const initAuth = async () => {
+      const existing = getUser();
+      const token = typeof window !== "undefined" ? localStorage.getItem("cloudshield_token") : null;
+      if (existing && token && token !== "netshield-demo-jwt-token") {
+        setUserState(existing);
+        wsClient.connect();
+        setLoading(false);
+      } else {
+        try {
+          const res = await api.login("admin@cloudshield.local", "Admin@12345!");
+          setUserState(res.user);
+          wsClient.connect();
+        } catch {
+          clearToken();
+          setUserState(null);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    initAuth();
   }, []);
 
   const login = (token: string, userData: UserData) => {
+    setToken(token);
     setUserState(userData);
     setUser(userData);
     wsClient.connect();

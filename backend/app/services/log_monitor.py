@@ -158,7 +158,7 @@ async def real_cloudtrail_poll_loop(account_id: int):
 
                 await db.commit()
 
-            poll_sec = max(15, settings.log_poll_interval)
+            poll_sec = max(15, getattr(settings, 'log_poll_interval_seconds', 30))
             await asyncio.sleep(poll_sec)
         except asyncio.CancelledError:
             logger.info(f"CloudTrail monitor cancelled for account {account_id}")

@@ -41,9 +41,10 @@ export default function AccountsPage() {
   const loadAccounts = async () => {
     try {
       const data = await api.getAccounts();
-      setAccounts(data);
+      setAccounts(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error(err);
+      setAccounts([]);
     } finally {
       setLoading(false);
     }
@@ -175,7 +176,7 @@ export default function AccountsPage() {
 
         {/* Account Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {accounts.map((acc) => (
+          {(Array.isArray(accounts) ? accounts : []).map((acc) => (
             <div
               key={acc.id}
               className="bg-[#111B2E] border border-[#24324D] rounded-2xl p-5 flex flex-col justify-between hover:border-slate-600 transition shadow-sm"
@@ -235,7 +236,7 @@ export default function AccountsPage() {
             </div>
           ))}
 
-          {accounts.length === 0 && !loading && (
+          {(Array.isArray(accounts) ? accounts.length : 0) === 0 && !loading && (
             <div className="col-span-full py-12 bg-[#111B2E] border border-[#24324D] rounded-2xl text-center space-y-3 p-6">
               <Cloud className="w-12 h-12 text-slate-500 mx-auto" />
               <h3 className="text-base font-bold text-white">No Cloud Accounts Connected</h3>

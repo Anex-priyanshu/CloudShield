@@ -26,7 +26,7 @@ class WebSocketClient {
 
     this.isConnecting = true;
     const proto = typeof window !== "undefined" && window.location.protocol === "https:" ? "wss:" : "ws:";
-    const defaultWs = typeof window !== "undefined" ? `${proto}//${window.location.hostname}:8000/ws` : "ws://localhost:8000/ws";
+    const defaultWs = typeof window !== "undefined" ? `${proto}//${window.location.hostname}:8050/ws` : "ws://localhost:8050/ws";
     const wsUrl = process.env.NEXT_PUBLIC_WS_URL || defaultWs;
 
     try {

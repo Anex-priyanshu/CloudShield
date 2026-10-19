@@ -49,7 +49,8 @@ function ScansContent() {
 
   const loadScans = async () => {
     try {
-      const list = await api.getScans();
+      const data = await api.getScans();
+      const list = Array.isArray(data) ? data : [];
       setScans(list);
 
       const targetId = queryScanId ? parseInt(queryScanId) : list.length > 0 ? list[0].id : null;
@@ -58,6 +59,7 @@ function ScansContent() {
       }
     } catch (e) {
       console.error(e);
+      setScans([]);
     }
   };
 
@@ -320,7 +322,7 @@ function ScansContent() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#1e2d48]">
-                {scans.length > 0 ? (
+                {Array.isArray(scans) && scans.length > 0 ? (
                   scans.map((s) => (
                     <tr key={s.id} className="hover:bg-[#162238] transition">
                       <td className="py-2.5 px-3 font-mono font-bold text-slate-200">

@@ -14,8 +14,10 @@ import {
 } from "lucide-react";
 import { AppShell } from "@/components/layout/AppShell";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 
 export default function ReportsPage() {
+  const { user, loading: authLoading } = useAuth();
   const [reports, setReports] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [downloadingId, setDownloadingId] = useState<number | null>(null);
@@ -23,17 +25,20 @@ export default function ReportsPage() {
   const loadReports = async () => {
     try {
       const data = await api.getReports();
-      setReports(data);
+      setReports(Array.isArray(data) ? data : []);
     } catch (e) {
       console.error(e);
+      setReports([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    loadReports();
-  }, []);
+    if (!authLoading && user) {
+      loadReports();
+    }
+  }, [user, authLoading]);
 
   const handleDownloadPdf = async (scanId: number) => {
     setDownloadingId(scanId);
@@ -141,7 +146,15 @@ export default function ReportsPage() {
                         {r.finished_at ? new Date(r.finished_at).toLocaleString() : "Recent"}
                       </td>
                       <td className="py-3 px-3">
-                        <span className="font-mono font-extrabold px-2 py-0.5 rounded bg-red-950/80 text-red-300 border border-red-800/80">
+                        <span className={`font-mono font-extrabold px-2.5 py-1 rounded-lg border text-xs ${
+                          r.account_risk_score >= 70
+                            ? "bg-red-950/80 text-red-300 border-red-800/80"
+                            : r.account_risk_score >= 50
+                            ? "bg-orange-950/80 text-orange-300 border-orange-800/80"
+                            : r.account_risk_score >= 20
+                            ? "bg-amber-950/80 text-amber-300 border-amber-800/80"
+                            : "bg-emerald-950/80 text-emerald-300 border-emerald-800/80"
+                        }`}>
                           {r.account_risk_score} / 100
                         </span>
                       </td>

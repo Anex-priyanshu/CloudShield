@@ -23,8 +23,10 @@ import { SeverityPill } from "@/components/ui/SeverityPill";
 import { FindingDrawer } from "@/components/findings/FindingDrawer";
 import { api } from "@/lib/api";
 import { wsClient } from "@/lib/ws";
+import { useAuth } from "@/lib/auth";
 
 export default function DashboardPage() {
+  const { user, loading: authLoading } = useAuth();
   const [selectedAccount, setSelectedAccount] = useState<any>(null);
   const [summary, setSummary] = useState<any>(null);
   const [trend, setTrend] = useState<any[]>([]);
@@ -35,20 +37,24 @@ export default function DashboardPage() {
   const fetchDashboardData = async (accountId?: number) => {
     try {
       const summaryData = await api.getDashboardSummary(accountId);
-      setSummary(summaryData);
+      setSummary(summaryData && typeof summaryData === "object" ? summaryData : {});
       const trendData = await api.getDashboardTrend(accountId);
-      setTrend(trendData);
+      setTrend(Array.isArray(trendData) ? trendData : []);
       const alertsData = await api.getAlerts({ limit: 8, account_id: accountId });
-      setLiveAlerts(alertsData.items || alertsData || []);
+      setLiveAlerts(Array.isArray(alertsData?.items) ? alertsData.items : Array.isArray(alertsData) ? alertsData : []);
     } catch (err) {
       console.error("Dashboard data load error", err);
+      setTrend([]);
+      setLiveAlerts([]);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDashboardData(selectedAccount?.id);
+    if (!authLoading && user) {
+      fetchDashboardData(selectedAccount?.id);
+    }
 
     // WebSocket real-time updates for scan completion & new alerts
     const unsubScan = wsClient.on("scan.completed", () => {
@@ -63,14 +69,19 @@ export default function DashboardPage() {
       unsubScan();
       unsubAlert();
     };
-  }, [selectedAccount?.id]);
+  }, [selectedAccount?.id, user, authLoading]);
 
   const severityCounts = {
-    critical: summary?.severity_counts?.critical ?? summary?.critical ?? 0,
-    high: summary?.severity_counts?.high ?? summary?.high ?? 0,
-    medium: summary?.severity_counts?.medium ?? summary?.medium ?? 0,
-    low: summary?.severity_counts?.low ?? summary?.low ?? 0,
+    critical: summary?.critical ?? summary?.severity_counts?.critical ?? 0,
+    high: summary?.high ?? summary?.severity_counts?.high ?? 0,
+    medium: summary?.medium ?? summary?.severity_counts?.medium ?? 0,
+    low: summary?.low ?? summary?.severity_counts?.low ?? 0,
   };
+
+  const rawScore = summary?.account_risk_score ?? summary?.last_scan?.account_risk_score ?? 0;
+  const displayScore = Math.round(rawScore);
+  const evaluatedResources = summary?.last_scan?.total_resources ?? summary?.total_resources ?? (summary?.total_open ? summary.total_open + 10 : 0);
+  const categoryCounts: Record<string, number> = summary?.by_category ?? summary?.category_counts ?? {};
 
   const topRisks = summary?.top5_risks || summary?.top_risks || [];
   const complianceCategories = summary?.compliance_pct || summary?.compliance_snapshot?.categories || {
@@ -220,12 +231,12 @@ export default function DashboardPage() {
             </div>
 
             <div className="py-2">
-              <RiskGauge score={summary?.account_risk_score ?? 68} size={200} />
+              <RiskGauge score={displayScore} size={200} />
             </div>
 
             <div className="bg-[#090f1b] p-3 rounded-xl border border-[#1e2d48] text-xs text-slate-400 flex items-center justify-between">
               <span>Evaluated Resources:</span>
-              <strong className="text-white font-mono">{summary?.total_resources ?? 25}</strong>
+              <strong className="text-white font-mono">{evaluatedResources}</strong>
             </div>
           </div>
 
@@ -250,12 +261,13 @@ export default function DashboardPage() {
             <div className="h-44 flex items-end gap-2.5 pt-4 pb-2 px-2 border-b border-[#24324D]">
               {trend.length > 0 ? (
                 trend.map((t, idx) => {
-                  const h = Math.max(15, Math.min(100, Math.round(t.score)));
-                  const isCrit = t.score >= 70;
+                  const s = t.account_risk_score ?? t.score ?? 0;
+                  const h = Math.max(15, Math.min(100, Math.round(s)));
+                  const isCrit = s >= 70;
                   return (
                     <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 group">
                       <span className="text-[10px] font-mono text-slate-400 opacity-0 group-hover:opacity-100 transition">
-                        {Math.round(t.score)}
+                        {Math.round(s)}
                       </span>
                       <div
                         style={{ height: `${h}%` }}
@@ -294,9 +306,9 @@ export default function DashboardPage() {
             </div>
 
             <div className="space-y-2.5 my-3">
-              {summary?.category_counts && Object.keys(summary.category_counts).length > 0 ? (
-                Object.entries(summary.category_counts).map(([cat, count]: [string, any]) => {
-                  const maxVal = Math.max(...Object.values(summary.category_counts as Record<string, number>));
+              {Object.keys(categoryCounts).length > 0 ? (
+                Object.entries(categoryCounts).map(([cat, count]: [string, any]) => {
+                  const maxVal = Math.max(...Object.values(categoryCounts));
                   const pct = Math.max(10, Math.min(100, Math.round((count / (maxVal || 1)) * 100)));
                   return (
                     <div key={cat} className="space-y-1">

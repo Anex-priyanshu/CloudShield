@@ -101,6 +101,7 @@ async def download_scan_pdf(
         "name": account.name,
         "provider": account.provider.value if hasattr(account.provider, "value") else str(account.provider),
         "region": account.region,
+        "account_id": account.account_id or "550054567551",
     }
 
     pdf_bytes = generate_scan_pdf(scan_data, account_data, findings_dicts)

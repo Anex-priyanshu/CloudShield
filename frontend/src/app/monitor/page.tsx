@@ -33,11 +33,13 @@ export default function LiveMonitorPage() {
   const loadInitialData = async () => {
     try {
       const recentEvents = await api.getEvents(undefined, 40);
-      setEvents(recentEvents);
+      setEvents(Array.isArray(recentEvents) ? recentEvents : []);
       const recentAlerts = await api.getAlerts({ limit: 30 });
-      setAlerts(recentAlerts.items || recentAlerts || []);
+      setAlerts(Array.isArray(recentAlerts?.items) ? recentAlerts.items : Array.isArray(recentAlerts) ? recentAlerts : []);
     } catch (e) {
       console.error(e);
+      setEvents([]);
+      setAlerts([]);
     }
   };
 

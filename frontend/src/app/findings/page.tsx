@@ -48,9 +48,10 @@ export default function FindingsPage() {
         status: statusFilter,
         sort: sortBy === "risk_score" ? "risk_score_desc" : "severity_desc",
       });
-      setFindings(data.items || data || []);
+      setFindings(Array.isArray(data?.items) ? data.items : Array.isArray(data) ? data : []);
     } catch (e) {
       console.error(e);
+      setFindings([]);
     } finally {
       setLoading(false);
     }
